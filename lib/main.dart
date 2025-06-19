@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFFece5d8))
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFece5d8))
             .copyWith(onSurface: const Color(0xFF321B15)),
         useMaterial3: true,
       ),

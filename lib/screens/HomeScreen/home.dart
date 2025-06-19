@@ -1,3 +1,4 @@
+import 'package:eco_world/screens/HomeScreen/components/gallerybox.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,9 +11,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("Home"),
+    return  const SizedBox(
+      child:   Center(
+        child: Gallerybox()
       ),
     );
   }
