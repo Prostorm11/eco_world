@@ -16,6 +16,7 @@ class _GalleryboxState extends State<Gallerybox> {
     Center(child: Text("Hello2")),
     Center(child: Text("Hello3")),
   ];
+  int likeCounter=0;
   @override
   void initState() {
     _controller = PageController();
@@ -107,17 +108,21 @@ class _GalleryboxState extends State<Gallerybox> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       InkWell(
-                        onTap: () {},
-                        child: const SizedBox(
+                        onTap: () {
+                          setState(() {
+                            likeCounter+=1;
+                          });
+                        },
+                        child:  SizedBox(
                             child: Row(
                           children: [
-                            Icon(Icons.favorite_border),
-                            SizedBox(
+                            const Icon(Icons.favorite_border),
+                            const SizedBox(
                               width: 6,
                             ),
                             Text(
-                              "2",
-                              style: TextStyle(
+                              "$likeCounter",
+                              style: const TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.w700),
                             )
                           ],
