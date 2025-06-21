@@ -1,3 +1,4 @@
+import 'package:eco_world/screens/ReelsScreen/components/videobox.dart';
 import 'package:flutter/material.dart';
 
 class ReelsScreen extends StatefulWidget {
@@ -11,10 +12,11 @@ class _ReelsScreenState extends State<ReelsScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
+      body: /* Center(
         child: 
         Text("Reels"),
-      ),
+      ), */
+      Videobox()
     );
   }
 }
