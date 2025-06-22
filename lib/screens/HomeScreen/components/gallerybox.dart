@@ -32,7 +32,8 @@ class _GalleryboxState extends State<Gallerybox> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +69,7 @@ class _GalleryboxState extends State<Gallerybox> {
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height*0.4,
+            height: MediaQuery.of(context).size.height*0.55,
             /* color: Colors.red, */
             child: Stack(
               alignment: Alignment.bottomCenter,
@@ -116,7 +117,7 @@ class _GalleryboxState extends State<Gallerybox> {
                         child:  SizedBox(
                             child: Row(
                           children: [
-                            const Icon(Icons.favorite_border),
+                             Icon(Icons.favorite_border,color: cs.onSurface,),
                             const SizedBox(
                               width: 6,
                             ),
@@ -132,15 +133,15 @@ class _GalleryboxState extends State<Gallerybox> {
                         onTap: () {
                           showCustomCommentModal(context);
                         },
-                        child: const SizedBox(
+                        child:  SizedBox(
                             child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(Icons.forum_outlined),
-                            SizedBox(
+                            Icon(Icons.forum_outlined,color:cs.onSurface,),
+                            const SizedBox(
                               width: 6,
                             ),
-                            Text(
+                            const Text(
                               "2",
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.w700),
@@ -152,16 +153,19 @@ class _GalleryboxState extends State<Gallerybox> {
                     ],
                   ),
                 ),
-                const Icon(Icons.save_alt_outlined),
+                 Icon(Icons.save_alt_outlined,color: cs.onSurface,),
               ],
             ),
           ),
-          const SizedBox(
+           const SizedBox(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('''Hello Maa Guy
-                How ae you''')
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal:8.0),
+                  child: Text('''Hello Maa Guy Guy Guy Guy Guy Guy Guy Guy Guy Guy Guy Guy
+How ae you''',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
+                )
               ],
             ),
           ),

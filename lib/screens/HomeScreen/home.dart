@@ -11,10 +11,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return  const SizedBox(
-      child:   Center(
-        child: Gallerybox()
-      ),
-    );
+    return const SingleChildScrollView(
+        child: Column(
+      children: [
+        Gallerybox(),
+        Gallerybox(),
+        Gallerybox(),
+        Gallerybox(),
+      ],
+    ));
   }
 }
