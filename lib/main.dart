@@ -41,13 +41,22 @@ class _EntryState extends StatefulWidget {
 }
 
 class Entry extends State<_EntryState> {
-  List<Widget> widgetOptions = [
-    const HomeScreen(),
-    const ReelsScreen(),
-    const NewsScreen(),
-    const ResearchScreen(),
-    const AccountScreen(),
-  ];
+ Widget _getScreen(int index) {
+  switch (index) {
+    case 0:
+      return const HomeScreen();
+    case 1:
+      return const ReelsScreen();
+    case 2:
+      return const NewsScreen();
+    case 3:
+      return const ResearchScreen();
+    case 4:
+      return const AccountScreen();
+    default:
+      return const HomeScreen();
+  }
+}
   int _selectIndex = 0;
 
   void _screenIndexChange(int index) {
@@ -61,7 +70,7 @@ class Entry extends State<_EntryState> {
     final cs = Theme.of(context).colorScheme;
     return SafeArea(
       child: Scaffold(
-        body: widgetOptions.elementAt(_selectIndex),
+        body: _getScreen(_selectIndex),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             border: Border(top: BorderSide(width: 0.25, color: cs.onSurface)),
@@ -79,7 +88,7 @@ class Entry extends State<_EntryState> {
                 BottomNavigationBarItem(
                     icon: Icon(Icons.newspaper), label: "News"),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.cast_for_education),
+                  icon: Icon(Icons.school),
                   label: "Research",
                 ),
                 BottomNavigationBarItem(
