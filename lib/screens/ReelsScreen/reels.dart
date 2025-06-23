@@ -1,4 +1,5 @@
 import 'package:eco_world/screens/ReelsScreen/components/actionbar.dart';
+import 'package:eco_world/screens/ReelsScreen/components/reelbox.dart';
 import 'package:eco_world/screens/ReelsScreen/components/videobox.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -19,7 +20,7 @@ class _ReelsScreenState extends State<ReelsScreen> {
     'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
   ];
 
-  late List<VideoPlayerController?> _controllers;
+  /* late List<VideoPlayerController?> _controllers;
   int currentIndex = 0;
 
   @override
@@ -72,12 +73,12 @@ class _ReelsScreenState extends State<ReelsScreen> {
     }
     pageController.dispose();
     super.dispose();
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView.builder(
+      body: /* PageView.builder(
         controller: pageController,
         scrollDirection: Axis.vertical,
         onPageChanged: _onPageChanged,
@@ -88,8 +89,8 @@ class _ReelsScreenState extends State<ReelsScreen> {
               ? Videobox(videoController: controller)
               : const Center(child: CircularProgressIndicator());
         },
-      ),
-     
+      ), */
+     Reelbox()
     );
   }
 }
