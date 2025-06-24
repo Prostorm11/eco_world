@@ -90,7 +90,7 @@ class _ReelsScreenState extends State<ReelsScreen> {
               : const Center(child: CircularProgressIndicator());
         },
       ), */
-     Reelbox()
+    Videobox()
     );
   }
 }
