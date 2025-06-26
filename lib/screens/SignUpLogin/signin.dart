@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -25,17 +26,12 @@ class _SigninScreenState extends State<SigninScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: SafeArea(
-          child: Center(
-            child: Text(
-              'Sign In',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: cs.onSurface, // responsive text color
-              ),
-            ),
-          ),
+        child: Center(
+          child:SizedBox(
+            height: 150,
+            width: 150,
+            child:Lottie.asset("assets/lottie/Monkey.json") ,
+          )
         ),
       ),
     );
