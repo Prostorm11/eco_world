@@ -16,7 +16,7 @@ class _ActionbarState extends State<Actionbar> {
   @override
   Widget build(BuildContext context) {
     final cs=Theme.of(context).colorScheme;
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height*0.40,
       width: MediaQuery.of(context).size.height*0.075,
       

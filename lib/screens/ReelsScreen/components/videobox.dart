@@ -106,25 +106,6 @@ class _VideoboxState extends State<Videobox> {
         },
       );
     
-   /*  widget.videoController.value.isInitialized
-        ? Stack(
-            children: [
-              SizedBox.expand( // Make it full screen
-                child: FittedBox(
-                  fit: BoxFit.fill, // Makes sure the video covers the screen
-                  child: SizedBox(
-                    width: widget.videoController.value.size.width,
-                    height: widget.videoController.value.size.height,
-                    child: VideoPlayer(widget.videoController),
-                  ),
-                ),
-              ),
-              const Positioned(
-                bottom: 0,
-                right: 0,
-                child: Actionbar())
-            ],
-          )
-        : const Center(child:  CircularProgressIndicator()); */
+   
   }
 }

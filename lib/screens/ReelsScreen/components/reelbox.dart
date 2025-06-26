@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -10,7 +9,7 @@ class Reelbox extends StatefulWidget {
 }
 
 class _ReelboxState extends State<Reelbox> {
-  late VideoPlayerController _videoController;
+ /*  late VideoPlayerController _videoController;
   @override
   void initState() {
     initializeVideoCrontroller();
@@ -34,7 +33,7 @@ class _ReelboxState extends State<Reelbox> {
    
     _videoController.dispose();
     super.dispose();
-  } 
+  }  */
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -48,21 +47,22 @@ class _ReelboxState extends State<Reelbox> {
        
         boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.7),blurRadius: 2,spreadRadius: 1)]
       ),
-      child: VideoPlayer(_videoController),
+     /*  child: VideoPlayer(_videoController), */
     );
   }
 }
 
 class ReelboxRectangular extends StatefulWidget {
-  const ReelboxRectangular({super.key});
+  final bool playVideo;
+  const ReelboxRectangular({super.key,required this.playVideo});
 
   @override
   State<ReelboxRectangular> createState() => _ReelboxRectangularState();
 }
 
 class _ReelboxRectangularState extends State<ReelboxRectangular> {
- late VideoPlayerController _videoController;
-  @override
+  late VideoPlayerController _videoController; 
+   @override
   void initState() {
     initializeVideoCrontroller();
     super.initState();
@@ -74,7 +74,10 @@ class _ReelboxRectangularState extends State<ReelboxRectangular> {
     _videoController.setVolume(100);
 
     if(!mounted) return;
+    if(widget.playVideo){
     _videoController.play();
+    }
+  
     setState(() {
       
     });
@@ -85,7 +88,7 @@ class _ReelboxRectangularState extends State<ReelboxRectangular> {
    
     _videoController.dispose();
     super.dispose();
-  } 
+  }  
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
