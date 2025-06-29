@@ -6,6 +6,7 @@ import 'package:eco_world/screens/NewScreen/news.dart';
 import 'package:eco_world/screens/ReelsScreen/reels.dart';
 import 'package:eco_world/screens/ResearchScreen/reasearch.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 /* import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart'; */
@@ -39,10 +40,10 @@ class MyApp extends StatelessWidget {
                   surface: const Color.fromARGB(255, 168, 105, 82), ),
           useMaterial3: true),
       themeMode: ThemeMode.system,
-      home: /* FirebaseAuth.instance.currentUser == null
+      home: FirebaseAuth.instance.currentUser == null
     ? const GetStartedScreen()
-    : const EntryScreen(), */
-    GetStartedScreen()
+    : const EntryScreen(),
+    
     );
   }
 }

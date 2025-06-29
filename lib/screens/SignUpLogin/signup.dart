@@ -1,5 +1,6 @@
 import 'package:eco_world/main.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 /* import 'package:firebase_auth/firebase_auth.dart'; */
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool signingUp = false;
 
   @override
   Widget build(BuildContext context) {
@@ -90,48 +92,18 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () async {
-                      /* try {
-                        final email = _emailController.text.trim();
-                        final password = _passwordController.text.trim();
-
-                        await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                          email: email,
-                          password: password,
-                        );
-
-                        // Go to home screen after successful signup
-                        if (context.mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) =>  const EntryScreen()),
-                          );
-                        }
-                      } on FirebaseAuthException catch (e) {
-                        // Handle common errors
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text("Signup Failed"),
-                            content: Text(e.message ?? "Something went wrong"),
-                            actions: [
-                              TextButton(
-                                child: const Text("OK"),
-                                onPressed: () => Navigator.pop(context),
-                              ),
-                            ],
-                          ),
-                        );
-                      } */
+                      signUpFunction(context);
                     },
-                    child: const Text("Sign Up"),
+                    child: signingUp
+                        ? const CircularProgressIndicator()
+                        : const Text("Sign Up"),
                   ),
                   const SizedBox(height: 16),
                   Center(
                     child: InkWell(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const SigninScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const SigninScreen()));
                       },
                       child: Text.rich(
                         TextSpan(
@@ -156,5 +128,50 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> signUpFunction(BuildContext context) async {
+    try {
+      setState(() {
+        signingUp = true;
+      });
+      final email = _emailController.text.trim();
+      final password = _passwordController.text.trim();
+
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Go to home screen after successful signup
+      if (context.mounted) {
+        setState(() {
+          signingUp = false;
+        });
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const EntryScreen()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        signingUp = false;
+      });
+      // Handle common errors
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Signup Failed"),
+          content: Text(e.message ?? "Something went wrong"),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

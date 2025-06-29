@@ -217,7 +217,7 @@ class _SigninScreenState extends State<SigninScreen> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () async {
-                      signInFunction();
+                      signInFunction(context);
                     },
                     child:siginingIN?const CircularProgressIndicator(): const Text("Sign In"),
                   ),
@@ -253,9 +253,9 @@ class _SigninScreenState extends State<SigninScreen> {
     );
   }
 
-  Future<void> signInFunction() async {
+  Future<void> signInFunction(BuildContext context) async {
     setState(() {
-        siginingIN=true;
+        siginingIN=!siginingIN;
       });
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
@@ -268,7 +268,7 @@ class _SigninScreenState extends State<SigninScreen> {
 
       if (!mounted) return;
       setState(() {
-        siginingIN=false;
+        siginingIN=!siginingIN;
       });
       Navigator.pushReplacement(
         context,
@@ -281,7 +281,13 @@ class _SigninScreenState extends State<SigninScreen> {
       } else if (e.code == 'wrong-password') {
         message = 'Wrong password provided.';
       }
+        if(mounted){
 
+        setState(() {
+          siginingIN=!siginingIN;
+        });
+        }
+        
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
