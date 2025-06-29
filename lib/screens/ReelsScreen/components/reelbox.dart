@@ -43,7 +43,7 @@ class _ReelboxState extends State<Reelbox> {
       height: height*0.15,
       width: width*0.325,
       decoration: BoxDecoration(
-        color: Colors.yellowAccent,
+        color: Colors.transparent,
        
         boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.7),blurRadius: 2,spreadRadius: 1)]
       ),
@@ -98,7 +98,7 @@ class _ReelboxRectangularState extends State<ReelboxRectangular> {
       height: height*0.3,
       width: width*0.325,
       decoration: BoxDecoration(
-        color: Colors.yellowAccent,
+        color: Colors.transparent,
        
         boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.7),blurRadius: 2,spreadRadius: 1)]
       ),

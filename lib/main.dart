@@ -1,13 +1,22 @@
+/* import 'package:eco_world/firebase_options.dart'; */
+import 'package:eco_world/firebase_options.dart';
 import 'package:eco_world/screens/AccountScreen/account.dart';
 import 'package:eco_world/screens/HomeScreen/home.dart';
 import 'package:eco_world/screens/NewScreen/news.dart';
 import 'package:eco_world/screens/ReelsScreen/reels.dart';
 import 'package:eco_world/screens/ResearchScreen/reasearch.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
+import 'package:firebase_core/firebase_core.dart';
+/* import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart'; */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -27,22 +36,25 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4A2B20))
               .copyWith(
-                  surface: const Color(0xFF4A2B20), onSurface: Colors.grey),
+                  surface: const Color.fromARGB(255, 168, 105, 82), ),
           useMaterial3: true),
       themeMode: ThemeMode.system,
-      home: const _EntryState(),
+      home: /* FirebaseAuth.instance.currentUser == null
+    ? const GetStartedScreen()
+    : const EntryScreen(), */
+    GetStartedScreen()
     );
   }
 }
 
-class _EntryState extends StatefulWidget {
-  const _EntryState();
+class EntryScreen extends StatefulWidget {
+  const EntryScreen();
 
   @override
-  State<_EntryState> createState() => Entry();
+  State<EntryScreen> createState() => Entry();
 }
 
-class Entry extends State<_EntryState> {
+class Entry extends State<EntryScreen> {
   Widget _getScreen(int index) {
     switch (index) {
       case 0:
@@ -50,7 +62,7 @@ class Entry extends State<_EntryState> {
       case 1:
         return const ReelsScreen();
       case 2:
-        return const SigninScreen();
+        return const NewsScreen();
       case 3:
         return const ResearchScreen();
       case 4:

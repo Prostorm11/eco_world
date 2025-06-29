@@ -37,6 +37,9 @@ class _GalleryboxState extends State<Gallerybox> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       width: double.infinity,
+      decoration:BoxDecoration(
+        color: cs.onPrimary
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -224,6 +227,7 @@ class _ExpandableTextState extends State<ExpandableText> {
               maxLines: maxLines,
               overflow: TextOverflow.fade,
               softWrap: true,
+              
             ),
             if (isOverflowing || _expanded)
               InkWell(
