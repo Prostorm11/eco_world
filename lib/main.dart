@@ -16,9 +16,15 @@ import 'package:flutter/material.dart';
 
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+   try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    runApp(MyApp());
+  } catch (e) {
+   print("No Connection");
+  }
   runApp(const MyApp());
 }
 

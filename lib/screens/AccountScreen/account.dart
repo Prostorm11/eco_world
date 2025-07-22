@@ -1,3 +1,5 @@
+import 'package:eco_world/screens/SignUpLogin/signin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:eco_world/screens/AccountScreen/components/reelReusable.dart';
 
@@ -47,7 +49,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   const Spacer(),
                   Row(
                     children: [
-                     const  Icon(Icons.add_box_outlined, size: 35),
+                      const Icon(Icons.add_box_outlined, size: 35),
                       const SizedBox(width: 20),
                       buildDropdownIcon(), // Simplified here
                     ],
@@ -192,7 +194,7 @@ class _AccountScreenState extends State<AccountScreen> {
       builder: (context) {
         return IconButton(
           icon: const Icon(Icons.pending, size: 35),
-          onPressed: () {
+          onPressed: () async{
             final RenderBox button = context.findRenderObject() as RenderBox;
             final RenderBox overlay =
                 Overlay.of(context).context.findRenderObject() as RenderBox;
@@ -228,8 +230,9 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
       ],
-    ).then((value) {
+    ).then((value) async{
       if (value == 'logout') {
+        _signOut(context);
         print('Logging out...');
       } else if (value == 'recent') {
         print('Showing recent activities...');
@@ -259,12 +262,28 @@ class _AccountScreenState extends State<AccountScreen> {
     ];
     return ReelReusable(mediaSource: media);
   }
-
+    
   Widget personalVideoAndPic() {
     return const Center(
       child: SizedBox(
         child: Text("Personal"),
       ),
     );
+  }
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const GetStartedScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error signing out: $e')),
+      );
+    }
   }
 }
