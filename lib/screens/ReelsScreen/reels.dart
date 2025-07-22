@@ -16,12 +16,14 @@ class _ReelsScreenState extends State<ReelsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Object> myitem = [{
+    List myitem = [1, 2, 3, 4, 5, 6];
+     /*  List<Object> myitems = [{
       "video":"link",
       "userId":"Id",
       "comment":[],
       "likes":"3",
-    }];
+      
+    }]; */
 
     return Scaffold(
         body: videoboxtapped

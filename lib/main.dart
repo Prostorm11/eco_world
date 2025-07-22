@@ -1,6 +1,7 @@
 /* import 'package:eco_world/firebase_options.dart'; */
 import 'package:eco_world/firebase_options.dart';
 import 'package:eco_world/screens/AccountScreen/account.dart';
+import 'package:eco_world/screens/AccountScreen/components/userpage.dart';
 import 'package:eco_world/screens/HomeScreen/home.dart';
 import 'package:eco_world/screens/NewScreen/news.dart';
 import 'package:eco_world/screens/ReelsScreen/reels.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
 }
 
 class EntryScreen extends StatefulWidget {
-  const EntryScreen();
+  const  EntryScreen();
 
   @override
   State<EntryScreen> createState() => Entry();
@@ -65,7 +66,7 @@ class Entry extends State<EntryScreen> {
       case 2:
         return const NewsScreen();
       case 3:
-        return const ResearchScreen();
+        return const UserPageScreen();
       case 4:
         return const AccountScreen();
       default:

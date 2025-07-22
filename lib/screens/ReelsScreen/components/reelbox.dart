@@ -9,20 +9,20 @@ class Reelbox extends StatefulWidget {
 }
 
 class _ReelboxState extends State<Reelbox> {
- /*  late VideoPlayerController _videoController;
+  late VideoPlayerController _videoController;
   @override
   void initState() {
     initializeVideoCrontroller();
     super.initState();
   }
   Future <void> initializeVideoCrontroller()async{
-    _videoController=VideoPlayerController.networkUrl(Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'));
+    _videoController=VideoPlayerController.networkUrl(Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',));
     await _videoController.initialize();
-    _videoController.setLooping(true);
-    _videoController.setVolume(100);
+    _videoController.setLooping(false);
+    _videoController.setVolume(50.0);
 
     if(!mounted) return;
-    _videoController.play();
+   /*  _videoController.play(); */
     setState(() {
       
     });
@@ -33,7 +33,7 @@ class _ReelboxState extends State<Reelbox> {
    
     _videoController.dispose();
     super.dispose();
-  }  */
+  } 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -47,7 +47,7 @@ class _ReelboxState extends State<Reelbox> {
        
         boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.7),blurRadius: 2,spreadRadius: 1)]
       ),
-     /*  child: VideoPlayer(_videoController), */
+      child: VideoPlayer(_videoController),
     );
   }
 }

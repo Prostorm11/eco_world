@@ -271,6 +271,7 @@ class _SigninScreenState extends State<SigninScreen> {
         siginingIN=!siginingIN;
       });
       Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (_) => const EntryScreen()),
       );
@@ -289,6 +290,7 @@ class _SigninScreenState extends State<SigninScreen> {
         }
         
       showDialog(
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Sign In Failed'),

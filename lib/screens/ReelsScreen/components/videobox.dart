@@ -4,7 +4,10 @@ import 'package:video_player/video_player.dart';
 
 class Videobox extends StatefulWidget {
   /* final VideoPlayerController videoController; */
-  const Videobox({super.key,/*  required this.videoController */});
+  const Videobox({
+    super.key,
+    /*  required this.videoController */
+  });
 
   @override
   State<Videobox> createState() => _VideoboxState();
@@ -73,39 +76,69 @@ class _VideoboxState extends State<Videobox> {
     pageController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    return 
-   PageView.builder(
-        controller: pageController,
-        scrollDirection: Axis.vertical,
-        onPageChanged: _onPageChanged,
-        itemCount: urls.length,
-        itemBuilder: (context, index) {
-          final controller = _controllers[index];
-          return controller != null
-              ? Stack(
-            children: [
-              SizedBox.expand( // Make it full screen
-                child: FittedBox(
-                  fit: BoxFit.fill, // Makes sure the video covers the screen
-                  child: SizedBox(
-                    width: controller.value.size.width,
-                    height: controller.value.size.height,
-                    child: VideoPlayer(controller),
+    var cs = Theme.of(context).colorScheme;
+    return PageView.builder(
+      controller: pageController,
+      scrollDirection: Axis.vertical,
+      onPageChanged: _onPageChanged,
+      itemCount: urls.length,
+      itemBuilder: (context, index) {
+        final controller = _controllers[index];
+        return controller != null
+            ? Stack(
+                children: [
+                  SizedBox.expand(
+                    // Make it full screen
+                    child: FittedBox(
+                      fit:
+                          BoxFit.fill, // Makes sure the video covers the screen
+                      child: SizedBox(
+                        width: controller.value.size.width,
+                        height: controller.value.size.height,
+                        child: VideoPlayer(controller),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const Positioned(
-                bottom: 0,
-                right: 0,
-                child: Actionbar())
-            ],
-          )
-              : const Center(child: CircularProgressIndicator());
-        },
-      );
-    
-   
+                  const Positioned(bottom: 0, right: 0, child: Actionbar()),
+                  Positioned(
+                      bottom: MediaQuery.of(context).size.height * 0.1,
+                      left: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(5),
+                                  height: 35,
+                                  width: 35,
+                                  decoration: BoxDecoration(
+                                    color: cs.onSurface,
+                                    borderRadius: BorderRadius.circular(17.5),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(5),
+                            width: 250,
+                            child: const Text("Some little comments to be written"),
+                          )
+                        ],
+                      )),
+                ],
+              )
+            : const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 }
