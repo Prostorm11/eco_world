@@ -1,7 +1,7 @@
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:eco_world/screens/AccountScreen/components/reelReusable.dart';
+import 'package:eco_world/screens/AccountScreen/components/reel_reusable.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -194,7 +194,7 @@ class _AccountScreenState extends State<AccountScreen> {
       builder: (context) {
         return IconButton(
           icon: const Icon(Icons.pending, size: 35),
-          onPressed: () async{
+          onPressed: () async {
             final RenderBox button = context.findRenderObject() as RenderBox;
             final RenderBox overlay =
                 Overlay.of(context).context.findRenderObject() as RenderBox;
@@ -230,7 +230,7 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
       ],
-    ).then((value) async{
+    ).then((value) async {
       if (value == 'logout') {
         _signOut(context);
         print('Logging out...');
@@ -242,10 +242,180 @@ class _AccountScreenState extends State<AccountScreen> {
 
   // Tabs Content
   Widget window() {
-    return const Center(
-      child: SizedBox(
-        child: Text("Window"),
-      ),
+    final theme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Complete Your Profile",
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 5),
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(width: 0.25,color: theme.onSurface)
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: Colors.amber),
+                            ),
+                            const Text(
+                              "Add a profile photo",
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          child: const Text("Add Photo"),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 5),
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(width: 0.25,color: theme.onSurface)
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: Colors.amber),
+                            ),
+                            const Text(
+                              "Add a profile photo",
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          child: const Text("Add Photo"),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 5),
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(width: 0.25,color: theme.onSurface)
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: Colors.amber),
+                            ),
+                            const Text(
+                              "Add a profile photo",
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          child: const Text("Add Photo"),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 5),
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(width: 0.25,color: theme.onSurface)
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: Colors.amber),
+                            ),
+                            const Text(
+                              "Add a profile photo",
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          child: const Text("Add Photo"),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ]),
     );
   }
 
@@ -262,7 +432,7 @@ class _AccountScreenState extends State<AccountScreen> {
     ];
     return ReelReusable(mediaSource: media);
   }
-    
+
   Widget personalVideoAndPic() {
     return const Center(
       child: SizedBox(
@@ -274,7 +444,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Future<void> _signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const GetStartedScreen()),

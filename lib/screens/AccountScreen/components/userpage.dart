@@ -1,6 +1,5 @@
 import 'package:eco_world/screens/AccountScreen/components/followbutton.dart';
-import 'package:eco_world/screens/AccountScreen/components/reelReusable.dart';
-import 'package:eco_world/screens/ReelsScreen/components/reelbox.dart';
+import 'package:eco_world/screens/AccountScreen/components/reel_reusable.dart';
 import 'package:flutter/material.dart';
 
 class UserPageScreen extends StatefulWidget {

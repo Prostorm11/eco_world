@@ -21,7 +21,7 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
-    runApp(MyApp());
+    runApp(const MyApp());
   } catch (e) {
    print("No Connection");
   }
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
 }
 
 class EntryScreen extends StatefulWidget {
-  const  EntryScreen();
+  const  EntryScreen({super.key});
 
   @override
   State<EntryScreen> createState() => Entry();
