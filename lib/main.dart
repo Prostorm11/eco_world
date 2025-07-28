@@ -8,7 +8,7 @@ import 'package:eco_world/screens/ReelsScreen/reels.dart';
 import 'package:eco_world/screens/ResearchScreen/reasearch.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';     
 /* import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart'; */
 import 'package:flutter/cupertino.dart';

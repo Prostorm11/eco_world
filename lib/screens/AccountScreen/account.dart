@@ -1,3 +1,4 @@
+import 'package:eco_world/screens/AccountScreen/components/dropdown_list_icon.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,32 @@ class _AccountScreenState extends State<AccountScreen> {
                     children: [
                       const Icon(Icons.add_box_outlined, size: 35),
                       const SizedBox(width: 20),
-                      buildDropdownIcon(), // Simplified here
+
+                      DropdownListIcon(
+                        icon: const Icon(
+                          Icons.pending,
+                          size: 35,
+                        ),
+                        myActions: const [
+                          {
+                            "title": "See Recent Activities",
+                            "icon": Icon(Icons.history),
+                            "value": "History"
+                          },
+                          {
+                            "title": "Logout",
+                            "icon": Icon(Icons.logout),
+                            "value": "Logout",
+                          }
+                        ],
+                        onpresses: (value) {
+                          if (value == 'Logout') {
+                            _signOut(context);
+                          } else if (value == 'History') {
+                            print('Showing recent activities...');
+                          }
+                        },
+                      ) // Simplified here
                     ],
                   ),
                 ],
@@ -188,58 +214,6 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  // Reusable Dropdown IconButton Widget
-  Widget buildDropdownIcon() {
-    return Builder(
-      builder: (context) {
-        return IconButton(
-          icon: const Icon(Icons.pending, size: 35),
-          onPressed: () async {
-            final RenderBox button = context.findRenderObject() as RenderBox;
-            final RenderBox overlay =
-                Overlay.of(context).context.findRenderObject() as RenderBox;
-            final Offset offset = button.localToGlobal(
-              Offset(0, button.size.height),
-              ancestor: overlay,
-            );
-            dropList(context, offset);
-          },
-        );
-      },
-    );
-  }
-
-  // Dropdown Menu Logic
-  void dropList(BuildContext context, Offset offset) {
-    showMenu<String>(
-      context: context,
-      position: RelativeRect.fromLTRB(offset.dx, offset.dy, 0, 0),
-      items: const [
-        PopupMenuItem<String>(
-          value: 'recent',
-          child: ListTile(
-            leading: Icon(Icons.history),
-            title: Text('See Recent Activities'),
-          ),
-        ),
-        PopupMenuItem<String>(
-          value: 'logout',
-          child: ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
-          ),
-        ),
-      ],
-    ).then((value) async {
-      if (value == 'logout') {
-        _signOut(context);
-        print('Logging out...');
-      } else if (value == 'recent') {
-        print('Showing recent activities...');
-      }
-    });
-  }
-
   // Tabs Content
   Widget window() {
     final theme = Theme.of(context).colorScheme;
@@ -265,9 +239,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     height: 150,
                     width: 150,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(width: 0.25,color: theme.onSurface)
-                    ),
+                        borderRadius: BorderRadius.circular(15),
+                        border:
+                            Border.all(width: 0.25, color: theme.onSurface)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -288,12 +262,62 @@ class _AccountScreenState extends State<AccountScreen> {
                             )
                           ],
                         ),
+                        DropdownListButton(text: "Add Photo", myActions: const [
+                          {
+                            "title": "Take Picture",
+                            "icon": Icon(Icons.camera_alt),
+                            "value": "Picture"
+                          },
+                          {
+                            "title": "Pick from gallery",
+                            "icon": Icon(Icons.photo),
+                            "value": "Gallery"
+                          },
+                        ],
+                        onpresses: (value) {
+                          if (value == 'Picture') {
+                           print("Taking new picture");
+                          } else if (value == 'Gallery') {
+                            print('Picking from gallery...');
+                          }
+                        },)
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 5),
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border:
+                            Border.all(width: 0.25, color: theme.onSurface)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: Colors.amber),
+                            ),
+                            const Text(
+                              "Add bio",
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
                         ElevatedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          child: const Text("Add Photo"),
+                          child: const Text("Add Bio"),
                         )
                       ],
                     ),
@@ -303,9 +327,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     height: 150,
                     width: 150,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(width: 0.25,color: theme.onSurface)
-                    ),
+                        borderRadius: BorderRadius.circular(15),
+                        border:
+                            Border.all(width: 0.25, color: theme.onSurface)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -321,7 +345,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   color: Colors.amber),
                             ),
                             const Text(
-                              "Add a profile photo",
+                              "Find others to follow",
                               style: TextStyle(fontWeight: FontWeight.w500),
                             )
                           ],
@@ -331,7 +355,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          child: const Text("Add Photo"),
+                          child: const Text("Find Others"),
                         )
                       ],
                     ),
@@ -341,9 +365,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     height: 150,
                     width: 150,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(width: 0.25,color: theme.onSurface)
-                    ),
+                        borderRadius: BorderRadius.circular(15),
+                        border:
+                            Border.all(width: 0.05, color: theme.onSurface)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -359,7 +383,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   color: Colors.amber),
                             ),
                             const Text(
-                              "Add a profile photo",
+                              "Upload Content",
                               style: TextStyle(fontWeight: FontWeight.w500),
                             )
                           ],
@@ -369,45 +393,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          child: const Text("Add Photo"),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 5),
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(width: 0.25,color: theme.onSurface)
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: Colors.amber),
-                            ),
-                            const Text(
-                              "Add a profile photo",
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          child: const Text("Add Photo"),
+                          child: const Text("Add Media"),
                         )
                       ],
                     ),
@@ -421,16 +407,44 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget myReel() {
     List<Map<String, dynamic>> media = [
-      {"type": "image", "url": "link"},
+      /* {"type": "image", "url": "link"},
       {"type": "video", "url": "link"},
       {"type": "image", "url": "link"},
       {"type": "image", "url": "link"},
       {"type": "image", "url": "link"},
       {"type": "image", "url": "link"},
       {"type": "image", "url": "link"},
-      {"type": "image", "url": "link"},
+      {"type": "image", "url": "link"}, */
     ];
-    return ReelReusable(mediaSource: media);
+    return (media.isEmpty
+        ? SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Share a moment with",
+                  style: TextStyle(fontSize: 25),
+                ),
+                const Text(
+                  "the world",
+                  style: TextStyle(fontSize: 25),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "Create your first reel",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ))
+              ],
+            ),
+          )
+        : ReelReusable(mediaSource: media));
   }
 
   Widget personalVideoAndPic() {

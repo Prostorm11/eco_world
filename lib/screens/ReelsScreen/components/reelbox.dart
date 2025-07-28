@@ -15,18 +15,36 @@ class _ReelboxState extends State<Reelbox> {
     initializeVideoCrontroller();
     super.initState();
   }
-  Future <void> initializeVideoCrontroller()async{
-    _videoController=VideoPlayerController.networkUrl(Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',));
+  Future<void> initializeVideoCrontroller() async {
+  try {
+    _videoController = VideoPlayerController.networkUrl(
+      Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
+    );
+
     await _videoController.initialize();
     _videoController.setLooping(false);
-    _videoController.setVolume(50.0);
+    _videoController.setVolume(0.5); // Volume is between 0.0 and 1.0
 
-    if(!mounted) return;
-   /*  _videoController.play(); */
+    if (!mounted) return;
+
     setState(() {
-      
+      // You can show the initialized video player here
     });
+  } catch (e, stackTrace) {
+    // 👇 Optional: print or log the error
+    print('Video initialization failed: $e');
+    print(stackTrace);
+
+    // 👇 Show a fallback UI or message to the user
+    if (mounted) {
+      setState(() {
+        // Maybe show an error placeholder instead of the video
+
+      });
+    }
   }
+}
+
 
    @override
   void dispose() {
