@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:eco_world/screens/AccountScreen/components/content_pick.dart';
 import 'package:eco_world/screens/AccountScreen/components/dropdown_list_icon.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -216,6 +219,21 @@ class _AccountScreenState extends State<AccountScreen> {
 
   // Tabs Content
   Widget window() {
+    final List<Map> squares=[
+    {
+      "icon":"",
+      "text":"Add bio",
+      "buttonText":"Add bio",
+      
+    },
+    {
+      "icon":"",
+      "text":"Find others to follow",
+      "buttonText":"Find others"
+    },
+   
+
+    ];
     final theme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
@@ -307,60 +325,36 @@ class _AccountScreenState extends State<AccountScreen> {
                                   color: Colors.amber),
                             ),
                             const Text(
-                              "Add bio",
+                              "Upload Content",
                               style: TextStyle(fontWeight: FontWeight.w500),
                             )
                           ],
                         ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          child: const Text("Add Bio"),
-                        )
+                        DropdownListButton(text: "Add Media", myActions: const [
+                          {
+                            "title": "Upload Video",
+                            "icon": Icon(Icons.movie_creation),
+                            "value": "Video"
+                          },
+                          {
+                            "title": "Upload picture",
+                            "icon": Icon(Icons.camera_alt),
+                            "value": "Picture"
+                          },
+                        ],
+                        onpresses: (value) async{
+                          if (value == 'Picture') {
+                          File? picked=await pickImageFromGallery();
+                           print("Uploading new picture");
+                          } else if (value == 'Video') {
+                            print('Uploading video...');
+                          }
+                        },)
                       ],
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 5),
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border:
-                            Border.all(width: 0.25, color: theme.onSurface)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: Colors.amber),
-                            ),
-                            const Text(
-                              "Find others to follow",
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          child: const Text("Find Others"),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
+                 ...squares.map((element){
+                  return   Container(
                     margin: const EdgeInsets.only(right: 5),
                     height: 150,
                     width: 150,
@@ -382,9 +376,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                   borderRadius: BorderRadius.circular(25),
                                   color: Colors.amber),
                             ),
-                            const Text(
-                              "Upload Content",
-                              style: TextStyle(fontWeight: FontWeight.w500),
+                             Text(
+                              "${element["text"]}",
+                              style: const TextStyle(fontWeight: FontWeight.w500),
                             )
                           ],
                         ),
@@ -393,11 +387,13 @@ class _AccountScreenState extends State<AccountScreen> {
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          child: const Text("Add Media"),
+                          child:  Text("${element["buttonText"]}"),
                         )
                       ],
                     ),
-                  ),
+                  );
+                 })
+                
                 ],
               ),
             ),

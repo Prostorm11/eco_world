@@ -72,7 +72,8 @@ class Entry extends State<EntryScreen> {
       case 2:
         return const NewsScreen();
       case 3:
-        return const UserPageScreen();
+       /*  return const UserPageScreen(); */
+       return ResearchScreen();
       case 4:
         return const AccountScreen();
       default:

@@ -99,7 +99,7 @@ class DropdownListButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
-        child: const Text("Add Photo"),
+        child:  Text(text),
       );
     });
   }
