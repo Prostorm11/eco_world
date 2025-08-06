@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_world/screens/AccountScreen/components/content_pick.dart';
+import 'package:eco_world/screens/AccountScreen/components/data_movement.dart';
 import 'package:eco_world/screens/AccountScreen/components/dropdown_list_icon.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -219,20 +221,17 @@ class _AccountScreenState extends State<AccountScreen> {
 
   // Tabs Content
   Widget window() {
-    final List<Map> squares=[
-    {
-      "icon":"",
-      "text":"Add bio",
-      "buttonText":"Add bio",
-      
-    },
-    {
-      "icon":"",
-      "text":"Find others to follow",
-      "buttonText":"Find others"
-    },
-   
-
+    final List<Map> squares = [
+      {
+        "icon": "",
+        "text": "Add bio",
+        "buttonText": "Add bio",
+      },
+      {
+        "icon": "",
+        "text": "Find others to follow",
+        "buttonText": "Find others"
+      },
     ];
     final theme = Theme.of(context).colorScheme;
     return Padding(
@@ -280,25 +279,44 @@ class _AccountScreenState extends State<AccountScreen> {
                             )
                           ],
                         ),
-                        DropdownListButton(text: "Add Photo", myActions: const [
-                          {
-                            "title": "Take Picture",
-                            "icon": Icon(Icons.camera_alt),
-                            "value": "Picture"
+                        DropdownListButton(
+                          text: "Add Photo",
+                          myActions: const [
+                            {
+                              "title": "Take Picture",
+                              "icon": Icon(Icons.camera_alt),
+                              "value": "Picture"
+                            },
+                            {
+                              "title": "Pick from gallery",
+                              "icon": Icon(Icons.photo),
+                              "value": "Gallery"
+                            },
+                          ],
+                          onpresses: (value) async {
+                            if (value == 'Picture') {
+                              print("Taking new picture");
+                            } else if (value == 'Gallery') {
+                              print('Picking from gallery...');
+                              try{
+
+                              File? picked = await pickImageFromGallery();
+                              if (picked != null) {
+                                final user = FirebaseAuth.instance.currentUser!;
+                                String? downloadedUrl = await uploadFileToFirebase(
+                                    picked,
+                                    "ProfilePics/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg");
+                                    if(downloadedUrl!=null){
+                                        await FirebaseFirestore.instance.collection("users").doc(user.uid).update({"profilepic":downloadedUrl});
+                                    /* await saveToFirestorePosts(url: downloadedUrl, type: "Picture",userID: user.uid); */
+                                    }
+                              }
+                            }catch(e){
+                              print(e);
+                            }
+                              }
                           },
-                          {
-                            "title": "Pick from gallery",
-                            "icon": Icon(Icons.photo),
-                            "value": "Gallery"
-                          },
-                        ],
-                        onpresses: (value) {
-                          if (value == 'Picture') {
-                           print("Taking new picture");
-                          } else if (value == 'Gallery') {
-                            print('Picking from gallery...');
-                          }
-                        },)
+                        )
                       ],
                     ),
                   ),
@@ -330,70 +348,94 @@ class _AccountScreenState extends State<AccountScreen> {
                             )
                           ],
                         ),
-                        DropdownListButton(text: "Add Media", myActions: const [
-                          {
-                            "title": "Upload Video",
-                            "icon": Icon(Icons.movie_creation),
-                            "value": "Video"
-                          },
-                          {
-                            "title": "Upload picture",
-                            "icon": Icon(Icons.camera_alt),
-                            "value": "Picture"
-                          },
-                        ],
-                        onpresses: (value) async{
-                          if (value == 'Picture') {
-                          File? picked=await pickImageFromGallery();
-                           print("Uploading new picture");
-                          } else if (value == 'Video') {
-                            print('Uploading video...');
-                          }
-                        },)
-                      ],
-                    ),
-                  ),
-                 ...squares.map((element){
-                  return   Container(
-                    margin: const EdgeInsets.only(right: 5),
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border:
-                            Border.all(width: 0.05, color: theme.onSurface)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: Colors.amber),
-                            ),
-                             Text(
-                              "${element["text"]}",
-                              style: const TextStyle(fontWeight: FontWeight.w500),
-                            )
+                        DropdownListButton(
+                          text: "Add Media",
+                          myActions: const [
+                            {
+                              "title": "Upload Video",
+                              "icon": Icon(Icons.movie_creation),
+                              "value": "Video"
+                            },
+                            {
+                              "title": "Upload picture",
+                              "icon": Icon(Icons.camera_alt),
+                              "value": "Picture"
+                            },
                           ],
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          child:  Text("${element["buttonText"]}"),
+                          onpresses: (value) async {
+                            try{
+
+                            if (value == 'Picture') {
+                              print("Uploading new picture");
+                              File? picfile=await pickImageFromGallery();
+                              if(picfile!=null){
+                                final User user=FirebaseAuth.instance.currentUser!;
+                                String? downloadedUrl=await uploadFileToFirebase(picfile, "PicturePosts/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg");
+                                if (downloadedUrl!=null){
+                                  await saveToFirestorePosts(url: downloadedUrl, type: "Picture", userID: user.uid);
+                                }
+                              }
+                            } else if (value == 'Video') {
+                              print('Uploading video...');
+                              File? videofile=await pickVideoFromGallery();
+                              if(videofile!=null){
+                                final User user=FirebaseAuth.instance.currentUser!;
+                                String? downloadedUrl=await uploadFileToFirebase(videofile, "VideoPosts/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.mp4");
+                                if(downloadedUrl!=null){
+
+                                await saveToFirestorePosts(url: downloadedUrl, type: "Video", userID: user.uid);
+                                }
+                              }
+                            }
+                            }catch(e){
+
+                            }
+                          },
                         )
                       ],
                     ),
-                  );
-                 })
-                
+                  ),
+                  ...squares.map((element) {
+                    return Container(
+                      margin: const EdgeInsets.only(right: 5),
+                      height: 150,
+                      width: 150,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border:
+                              Border.all(width: 0.05, color: theme.onSurface)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25),
+                                    color: Colors.amber),
+                              ),
+                              Text(
+                                "${element["text"]}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500),
+                              )
+                            ],
+                          ),
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                            child: Text("${element["buttonText"]}"),
+                          )
+                        ],
+                      ),
+                    );
+                  })
                 ],
               ),
             ),

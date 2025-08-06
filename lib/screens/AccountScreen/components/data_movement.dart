@@ -6,8 +6,8 @@ Future<String?> uploadFileToFirebase(File file, String storagePath) async {
   try {
     final ref = FirebaseStorage.instance.ref().child(storagePath);
     final uploadTask = await ref.putFile(file);
-    final downloadUrl = await ref.getDownloadURL();
-    return downloadUrl; // Use this to save in Firestore or anywhere
+    final downloadedUrl = await ref.getDownloadURL();
+    return downloadedUrl; // Use this to save in Firestore or anywhere
   } catch (e) {
     print('Upload failed: $e');
     return null;
@@ -16,13 +16,16 @@ Future<String?> uploadFileToFirebase(File file, String storagePath) async {
 
 Future<void> saveToFirestorePosts({
   required String url,
-  required String type, // "image" or "video"
-  String? userID,
+  required String type,
+  String? caption, // "image" or "video"
+  required String userID,
 }) async {
-  await FirebaseFirestore.instance.collection('media').add({
+  await FirebaseFirestore.instance.collection('posts').add({
     'url': url,
     'mediaType': type,
-    'userId': userID ?? '',
+    'userId': userID ,
+    "comments":[],
+    "likes":0,
     'timestamp': FieldValue.serverTimestamp(),
   });
 }

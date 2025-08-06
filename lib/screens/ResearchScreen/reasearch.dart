@@ -15,6 +15,7 @@ class _ResearchScreenState extends State<ResearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme=Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
@@ -44,9 +45,9 @@ class _ResearchScreenState extends State<ResearchScreen> {
             child: ElevatedButton.icon(
               onPressed: () {},
               icon: const Icon(Icons.upload, color: Colors.white),
-              label: const Text("Upload Your Research"),
+              label:  Text("Upload Your Research",style: TextStyle(color: theme.onPrimary),),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
+                backgroundColor: theme.onSurface,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -75,7 +76,7 @@ class _ResearchScreenState extends State<ResearchScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(
-                      color: selected ? Colors.orange : const Color(0xFFEDEDED),
+                      color: selected ? theme.onSurface : theme.onPrimary,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
