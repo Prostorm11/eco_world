@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Gallerybox extends StatefulWidget {
-  const Gallerybox({super.key});
+  final String postUrl;
+  const Gallerybox({super.key,required this.postUrl});
 
   @override
   State<Gallerybox> createState() => _GalleryboxState();
@@ -11,17 +12,19 @@ class Gallerybox extends StatefulWidget {
 
 class _GalleryboxState extends State<Gallerybox> {
   late final PageController _controller;
-  List<Widget> images = const [
-    Center(child: Text("Hello1")),
-    Center(child: Text("Hello2")),
-    Center(child: Text("Hello3")),
-  ];
+   List<Widget> images=[];
+  
   int likeCounter = 0;
 
   @override
   void initState() {
     _controller = PageController();
+    images.add(Image.network(widget.postUrl));
+    images.add(const Center(child:  Text("Hello1")));
+    images.add(const Center(child:  Text("Hello2")));
+    images.add(const Center(child:  Text("Hello3")));
     super.initState();
+    
   }
 
   @override
