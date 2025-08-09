@@ -104,3 +104,61 @@ class DropdownListButton extends StatelessWidget {
     });
   }
 }
+
+
+
+
+class DropdownListText extends StatelessWidget {
+  final String text;
+  final List<Map> myActions;
+  final Function? onpresses;
+  final FontWeight fontWeight;
+  final double fontsize;
+  const DropdownListText({
+    super.key,
+    required this.fontsize,
+    required this.fontWeight,
+    required this.text,
+    this.onpresses,
+    required this.myActions
+  });
+
+  void dropList(BuildContext context, Offset offset) {
+    showMenu<String>(
+            context: context,
+            position: RelativeRect.fromLTRB(offset.dx, offset.dy, 0, 0),
+            items: myActions.map((element) {
+              return PopupMenuItem<String>(
+                value: element["value"],
+                child: ListTile(
+                  leading: element["icon"],
+                  title: Text('${element["title"]}'),
+                ),
+              );
+            }).toList())
+        .then((value) async {
+      if (onpresses != null) {
+        onpresses!(value); // ✅ Call the parent-supplied function
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(builder: (context) {
+      return TextButton(
+        onPressed: () {
+          final RenderBox button = context.findRenderObject() as RenderBox;
+          final RenderBox overlay =
+              Overlay.of(context).context.findRenderObject() as RenderBox;
+          final Offset offset = button
+              .localToGlobal(Offset(0, button.size.height), ancestor: overlay);
+
+          dropList(context, offset);
+        },
+       
+        child:  Text(text,style:TextStyle(fontSize: fontsize,fontWeight: fontWeight) ,),
+      );
+    });
+  }
+}

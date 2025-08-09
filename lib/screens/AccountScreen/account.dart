@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_world/screens/AccountScreen/components/content_pick.dart';
 import 'package:eco_world/screens/AccountScreen/components/data_movement.dart';
 import 'package:eco_world/screens/AccountScreen/components/dropdown_list_icon.dart';
+import 'package:eco_world/screens/AccountScreen/components/upload_progress_indicator.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -298,23 +299,31 @@ class _AccountScreenState extends State<AccountScreen> {
                               print("Taking new picture");
                             } else if (value == 'Gallery') {
                               print('Picking from gallery...');
-                              try{
-
-                              File? picked = await pickImageFromGallery();
-                              if (picked != null) {
-                                final user = FirebaseAuth.instance.currentUser!;
-                                String? downloadedUrl = await uploadFileToFirebase(
-                                    picked,
-                                    "ProfilePics/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg");
-                                    if(downloadedUrl!=null){
-                                        await FirebaseFirestore.instance.collection("users").doc(user.uid).update({"profilepic":downloadedUrl});
+                              try {
+                                File? picked = await pickImageFromGallery();
+                                if (picked != null) {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser!;
+                                  final ValueNotifier<double> progressNotifier =
+                                      ValueNotifier<double>(0);
+                                  showUploadDialog(context, progressNotifier);
+                                  String? downloadedUrl =
+                                      await uploadFileToFirebase(
+                                          picked,
+                                          "ProfilePics/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg",
+                                          progressNotifier);
+                                  if (downloadedUrl != null) {
+                                    await FirebaseFirestore.instance
+                                        .collection("users")
+                                        .doc(user.uid)
+                                        .update({"profilepic": downloadedUrl});
                                     /* await saveToFirestorePosts(url: downloadedUrl, type: "Picture",userID: user.uid); */
-                                    }
+                                  }
+                                }
+                              } catch (e) {
+                                print(e);
                               }
-                            }catch(e){
-                              print(e);
                             }
-                              }
                           },
                         )
                       ],
@@ -363,32 +372,54 @@ class _AccountScreenState extends State<AccountScreen> {
                             },
                           ],
                           onpresses: (value) async {
-                            try{
-
-                            if (value == 'Picture') {
-                              print("Uploading new picture");
-                              File? picfile=await pickImageFromGallery();
-                              if(picfile!=null){
-                                final User user=FirebaseAuth.instance.currentUser!;
-                                String? downloadedUrl=await uploadFileToFirebase(picfile, "PicturePosts/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg");
-                                if (downloadedUrl!=null){
-                                  await saveToFirestorePosts(url: downloadedUrl, type: "Picture", userID: user.uid);
+                            try {
+                              if (value == 'Picture') {
+                                print("Uploading new picture");
+                                File? picfile = await pickImageFromGallery();
+                                if (picfile != null) {
+                                  final User user =
+                                      FirebaseAuth.instance.currentUser!;
+                                  final ValueNotifier<double> progressNotifier =
+                                      ValueNotifier<double>(0);
+                                  showUploadDialog(context, progressNotifier);
+                                  String? downloadedUrl =
+                                      await uploadFileToFirebase(
+                                          picfile,
+                                          "PicturePosts/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg",
+                                          progressNotifier);
+                                  if (downloadedUrl != null) {
+                                    await saveToFirestorePosts(
+                                        url: downloadedUrl,
+                                        type: "Picture",
+                                        userID: user.uid);
+                                  }
                                 }
-                              }
-                            } else if (value == 'Video') {
-                              print('Uploading video...');
-                              File? videofile=await pickVideoFromGallery();
-                              if(videofile!=null){
-                                final User user=FirebaseAuth.instance.currentUser!;
-                                String? downloadedUrl=await uploadFileToFirebase(videofile, "VideoPosts/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.mp4");
-                                if(downloadedUrl!=null){
+                              } else if (value == 'Video') {
+                                print('Uploading video...');
+                                File? videofile = await pickVideoFromGallery();
+                                final ValueNotifier<double> progressNotifier =
+                                    ValueNotifier<double>(0);
+                                if (videofile != null) {
+                                  final User user =
+                                      FirebaseAuth.instance.currentUser!;
+                                  showUploadDialog(context, progressNotifier);
+                                  String? downloadedUrl =
+                                      await uploadFileToFirebase(
+                                          videofile,
+                                          "VideoPosts/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.mp4",
+                                          progressNotifier);
 
-                                await saveToFirestorePosts(url: downloadedUrl, type: "Video", userID: user.uid);
+                                  if (downloadedUrl != null) {
+                                    await saveToFirestorePosts(
+                                        url: downloadedUrl,
+                                        type: "Video",
+                                        userID: user.uid);
+                                  }
                                 }
+                                progressNotifier.value = 0;
                               }
-                            }
-                            }catch(e){
-
+                            } catch (e) {
+                              print(e);
                             }
                           },
                         )
@@ -472,13 +503,51 @@ class _AccountScreenState extends State<AccountScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Create your first reel",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ))
+                DropdownListText(
+                  fontsize: 16,
+                  fontWeight: FontWeight.bold,
+                  text: "Create your first reel",
+                  myActions: const [
+                    {
+                      "title": "Take Picture",
+                      "icon": Icon(Icons.camera_alt),
+                      "value": "Picture"
+                    },
+                    {
+                      "title": "Pick from gallery",
+                      "icon": Icon(Icons.photo),
+                      "value": "Gallery"
+                    },
+                  ],
+                  onpresses: (value) async {
+                            if (value == 'Picture') {
+                              print("Taking new picture");
+                            } else if (value == 'Gallery') {
+                              print('Picking from gallery...');
+                              try {
+                                File? picked = await pickVideoFromGallery();
+                                if (picked != null) {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser!;
+                                  final ValueNotifier<double> progressNotifier =
+                                      ValueNotifier<double>(0);
+                                  showUploadDialog(context, progressNotifier);
+                                  String? downloadedUrl =
+                                      await uploadFileToFirebase(
+                                          picked,
+                                          "Reels/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.mp4",
+                                          progressNotifier);
+                                  if (downloadedUrl != null) {
+                                    await saveToFirestoreReels(userID: user.uid, videoUrl: downloadedUrl);
+                                   
+                                  }
+                                }
+                              } catch (e) {
+                                print(e);
+                              }
+                            }
+                          },
+                )
               ],
             ),
           )

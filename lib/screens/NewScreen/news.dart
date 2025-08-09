@@ -20,8 +20,8 @@ class _NewsScreenState extends State<NewsScreen> {
           backgroundColor: Colors.white,
           foregroundColor: Colors.black87,
         ),
-        body: Column(
-          children: const [
+        body: const Column(
+          children: [
             SizedBox(height: 10),
             NewsToggleButtons(),
             Expanded(child: NewsList()),
@@ -63,7 +63,7 @@ class NewsToggleButtons extends StatelessWidget {
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: Color(0xFFF0F0F0),
+                color: const Color(0xFFF0F0F0),
                 borderRadius: BorderRadius.circular(20),
               ),
               alignment: Alignment.center,
