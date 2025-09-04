@@ -86,7 +86,8 @@ class _ReelboxRectangularState extends State<ReelboxRectangular> {
     super.initState();
   }
   Future <void> initializeVideoCrontroller()async{
-    _videoController=VideoPlayerController.networkUrl(Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'));
+    try{
+      _videoController=VideoPlayerController.networkUrl(Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'));
     await _videoController.initialize();
     _videoController.setLooping(true);
     _videoController.setVolume(100);
@@ -99,6 +100,11 @@ class _ReelboxRectangularState extends State<ReelboxRectangular> {
     setState(() {
       
     });
+
+    }catch(e){
+      print("oopsy");
+    }
+    
   }
 
    @override

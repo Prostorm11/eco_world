@@ -1,4 +1,4 @@
-import 'package:eco_world/screens/ReelsScreen/components/reelbox.dart';
+/* import 'package:eco_world/screens/ReelsScreen/components/reelbox.dart';
 import 'package:eco_world/screens/ReelsScreen/components/videobox.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -25,7 +25,9 @@ class _ReelsScreenState extends State<ReelsScreen> {
       
     }]; */
 
-    return Scaffold(
+    return 
+      Videobox();
+    /* Scaffold(
         body: videoboxtapped
             ? const Videobox()
             : SingleChildScrollView(
@@ -99,6 +101,41 @@ class _ReelsScreenState extends State<ReelsScreen> {
                                 child:  ReelboxRectangular(playVideo: rectangleReelVisible,))),
                   ]
                 ]),
-              ));
+              )); */
+  }
+}
+ */  
+
+// reels.dart
+import 'package:flutter/material.dart';
+import 'package:eco_world/screens/ReelsScreen/components/videobox.dart';
+
+class ReelsScreen extends StatefulWidget {
+  const ReelsScreen({super.key});
+
+  @override
+  State<ReelsScreen> createState() => ReelsScreenState();
+}
+
+class ReelsScreenState extends State<ReelsScreen> {
+  // Add a GlobalKey to access the state of Videobox
+  final GlobalKey<VideoboxState> _videoboxKey = GlobalKey<VideoboxState>();
+
+  // Public method to pause the video
+  void pauseVideo() {
+    _videoboxKey.currentState?.pauseCurrentVideo();
+  }
+
+  // Public method to resume the video
+  void resumeVideo() {
+    _videoboxKey.currentState?.resumeCurrentVideo();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Pass the key to the Videobox
+    return Scaffold(
+      body: Videobox(key: _videoboxKey),
+    );
   }
 }

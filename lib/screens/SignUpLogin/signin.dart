@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:eco_world/main.dart';
+import 'package:eco_world/screens/SignUpLogin/completeProfile.dart';
 import 'package:eco_world/screens/SignUpLogin/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 /* import 'package:firebase_auth/firebase_auth.dart'; */
@@ -15,7 +16,7 @@ class GetStartedScreen extends StatefulWidget {
 
 class _GetStartedScreenState extends State<GetStartedScreen> {
   int _textIndex = 0;
-  
+
   final List<String> _texts = [
     "Pulse of the planet.",
     "Connect through nature."
@@ -139,7 +140,7 @@ class SigninScreen extends StatefulWidget {
 class _SigninScreenState extends State<SigninScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool siginingIN=false;
+  bool siginingIN = false;
 
   @override
   Widget build(BuildContext context) {
@@ -177,8 +178,9 @@ class _SigninScreenState extends State<SigninScreen> {
                   const SizedBox(height: 40),
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2),
-                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(width: 1, color: Colors.black),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
                     ),
                     child: TextField(
                       controller: _emailController,
@@ -198,8 +200,9 @@ class _SigninScreenState extends State<SigninScreen> {
                   const SizedBox(height: 16),
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2),
-                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(width: 1, color: Colors.black),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
                     ),
                     child: TextField(
                       controller: _passwordController,
@@ -219,7 +222,9 @@ class _SigninScreenState extends State<SigninScreen> {
                     onPressed: () async {
                       signInFunction(context);
                     },
-                    child:siginingIN?const CircularProgressIndicator(): const Text("Sign In"),
+                    child: siginingIN
+                        ? const CircularProgressIndicator()
+                        : const Text("Sign In"),
                   ),
                   const SizedBox(height: 16),
                   Center(
@@ -255,8 +260,8 @@ class _SigninScreenState extends State<SigninScreen> {
 
   Future<void> signInFunction(BuildContext context) async {
     setState(() {
-        siginingIN=!siginingIN;
-      });
+      siginingIN = !siginingIN;
+    });
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
@@ -268,13 +273,18 @@ class _SigninScreenState extends State<SigninScreen> {
 
       if (!mounted) return;
       setState(() {
-        siginingIN=!siginingIN;
+        siginingIN = !siginingIN;
       });
       Navigator.pushReplacement(
         // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (_) => const EntryScreen()),
       );
+      /*   Navigator.push(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (_) => const NameUsernameScreen()),
+      ); */
     } on FirebaseAuthException catch (e) {
       String message = 'Something went wrong.';
       if (e.code == 'user-not-found') {
@@ -282,13 +292,12 @@ class _SigninScreenState extends State<SigninScreen> {
       } else if (e.code == 'wrong-password') {
         message = 'Wrong password provided.';
       }
-        if(mounted){
-
+      if (mounted) {
         setState(() {
-          siginingIN=!siginingIN;
+          siginingIN = !siginingIN;
         });
-        }
-        
+      }
+
       showDialog(
         // ignore: use_build_context_synchronously
         context: context,

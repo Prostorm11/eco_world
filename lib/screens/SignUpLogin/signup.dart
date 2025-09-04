@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_world/main.dart';
+import 'package:eco_world/screens/SignUpLogin/completeProfile.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,8 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   bool signingUp = false;
 
   @override
@@ -64,6 +67,57 @@ class _SignupScreenState extends State<SignupScreen> {
                 label: "Password",
                 controller: _passwordController,
                 obscureText: true,
+              ),
+              const SizedBox(height: 16),
+                const Text(
+                "What's your name?",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  hintText: "Enter your full name",
+                  prefixIcon: const Icon(Icons.person),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Name cannot be empty";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 25),
+              const Text(
+                "Choose a username",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  hintText: "@username",
+                  prefixIcon: const Icon(Icons.alternate_email),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Username cannot be empty";
+                  }
+                  if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
+                    return "Only letters, numbers, and _ allowed";
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 24),
               ElevatedButton(
@@ -116,8 +170,9 @@ class _SignupScreenState extends State<SignupScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 2),
-        borderRadius: BorderRadius.circular(20),
+        border: Border.all(width: 1, color: Colors.black),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
       ),
       child: TextField(
         controller: controller,
@@ -161,13 +216,13 @@ class _SignupScreenState extends State<SignupScreen> {
       }
 
       await FirebaseFirestore.instance.collection("users").doc(uid).set({
-        "name": "",
+        "name": _nameController.text.trim(),
         "email": email,
-        "handle": "",
+        "handle": _usernameController.text.trim(),
         "bio": "",
         "profilepic": "",
         "followers": 0,
-        "following": "",
+        "following": 0,
         "numberPosts": 0,
         "joinedAt": FieldValue.serverTimestamp(),
       });
@@ -177,6 +232,11 @@ class _SignupScreenState extends State<SignupScreen> {
         context,
         MaterialPageRoute(builder: (_) => const EntryScreen()),
       );
+       /* Navigator.push(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (_) => const NameUsernameScreen()),
+      ); */
     } on FirebaseAuthException catch (e) {
       _showErrorDialog(context, e.message ?? "Signup failed.");
     } finally {

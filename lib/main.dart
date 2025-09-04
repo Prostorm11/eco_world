@@ -1,9 +1,12 @@
+// main.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_world/firebase_options.dart';
 import 'package:eco_world/screens/AccountScreen/account.dart';
 import 'package:eco_world/screens/HomeScreen/home.dart';
 import 'package:eco_world/screens/NewScreen/news.dart';
 import 'package:eco_world/screens/ReelsScreen/reels.dart';
 import 'package:eco_world/screens/ResearchScreen/reasearch.dart';
+import 'package:eco_world/constants.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,6 +22,18 @@ void main() async {
     );
   } catch (e) {
     debugPrint("Firebase initialization failed: $e");
+  }
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (user != null) {
+    final doc = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .get();
+
+    if (doc.exists) {
+      currentUser = UserModel.fromMap(doc.data()!);
+    }
   }
 
   runApp(const MyApp());
@@ -60,18 +75,37 @@ class EntryScreen extends StatefulWidget {
 class _EntryScreenState extends State<EntryScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeScreen(),
-    ReelsScreen(),
-    NewsScreen(),
-    ResearchScreen(),
-    AccountScreen(),
-  ];
+  // Key to control the ReelsScreen's state
+  final GlobalKey<ReelsScreenState> _reelsScreenKey = GlobalKey<ReelsScreenState>();
+
+  late final List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      const HomeScreen(),
+      ReelsScreen(key: _reelsScreenKey), // Pass the key here
+      const NewsScreen(),
+      const ResearchScreen(),
+      const AccountScreen(),
+    ];
+  }
 
   void _onTabSelected(int index) {
+    // Check if the previous tab was ReelsScreen
+    if (_selectedIndex == 1) {
+      _reelsScreenKey.currentState?.pauseVideo();
+    }
+
     setState(() {
       _selectedIndex = index;
     });
+
+    // Check if the new tab is ReelsScreen
+    if (index == 1) {
+      _reelsScreenKey.currentState?.resumeVideo();
+    }
   }
 
   @override

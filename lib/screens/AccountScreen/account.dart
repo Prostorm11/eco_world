@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eco_world/constants.dart';
 import 'package:eco_world/screens/AccountScreen/components/content_pick.dart';
 import 'package:eco_world/screens/AccountScreen/components/data_movement.dart';
 import 'package:eco_world/screens/AccountScreen/components/dropdown_list_icon.dart';
@@ -19,6 +20,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   String currentContent = "window";
+  /* String uid = FirebaseAuth.instance.currentUser?.uid ?? ""; */
 
   void changePage(String contentKey) {
     setState(() => currentContent = contentKey);
@@ -29,6 +31,19 @@ class _AccountScreenState extends State<AccountScreen> {
         "reel": 1,
         "personal": 2,
       }[currentContent]!;
+  late Map<String,dynamic> data;
+  @override
+/*   initState() async {
+    super.initState();
+  final doc = await FirebaseFirestore.instance
+    .collection("users")
+    .doc(uid)
+    .get(const GetOptions(source: Source.cache));
+    if(doc.exists){
+
+    data=doc.data() as Map<String,dynamic>;
+    }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +59,11 @@ class _AccountScreenState extends State<AccountScreen> {
               padding: const EdgeInsets.all(12.0),
               child: Row(
                 children: [
-                  const Row(
+                   Row(
                     children: [
                       Text(
-                        "handle",
-                        style: TextStyle(fontSize: 25),
+                        currentUser?.handle ?? "username",
+                        style: TextStyle(fontSize: 23),
                       ),
                       Icon(Icons.expand_more)
                     ],
@@ -113,26 +128,26 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                             child: const Icon(Icons.camera, size: 35),
                           ),
-                          const Column(
+                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [Text("1"), Text("posts")],
+                            children: [Text(currentUser?.posts.toString() ?? "0"), Text("posts")],
                           ),
-                          const Column(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [Text("1"), Text("followers")],
+                            children: [Text(currentUser?.followers.toString() ?? "0"), Text("followers")],
                           ),
-                          const Column(
+                            Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [Text("1"), Text("following")],
+                            children: [Text(currentUser?.following.toString() ?? "0"), Text("following")],
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                     Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       child:
-                          Text("Derrick Marfo", style: TextStyle(fontSize: 18)),
+                          Text(currentUser?.name ?? "Name", style: const TextStyle(fontSize: 18)),
                     ),
                     const SizedBox(height: 10),
 
@@ -520,33 +535,31 @@ class _AccountScreenState extends State<AccountScreen> {
                     },
                   ],
                   onpresses: (value) async {
-                            if (value == 'Picture') {
-                              print("Taking new picture");
-                            } else if (value == 'Gallery') {
-                              print('Picking from gallery...');
-                              try {
-                                File? picked = await pickVideoFromGallery();
-                                if (picked != null) {
-                                  final user =
-                                      FirebaseAuth.instance.currentUser!;
-                                  final ValueNotifier<double> progressNotifier =
-                                      ValueNotifier<double>(0);
-                                  showUploadDialog(context, progressNotifier);
-                                  String? downloadedUrl =
-                                      await uploadFileToFirebase(
-                                          picked,
-                                          "Reels/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.mp4",
-                                          progressNotifier);
-                                  if (downloadedUrl != null) {
-                                    await saveToFirestoreReels(userID: user.uid, videoUrl: downloadedUrl);
-                                   
-                                  }
-                                }
-                              } catch (e) {
-                                print(e);
-                              }
-                            }
-                          },
+                    if (value == 'Picture') {
+                      print("Taking new picture");
+                    } else if (value == 'Gallery') {
+                      print('Picking from gallery...');
+                      try {
+                        File? picked = await pickVideoFromGallery();
+                        if (picked != null) {
+                          final user = FirebaseAuth.instance.currentUser!;
+                          final ValueNotifier<double> progressNotifier =
+                              ValueNotifier<double>(0);
+                          showUploadDialog(context, progressNotifier);
+                          String? downloadedUrl = await uploadFileToFirebase(
+                              picked,
+                              "Reels/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.mp4",
+                              progressNotifier);
+                          if (downloadedUrl != null) {
+                            await saveToFirestoreReels(
+                                userID: user.uid, videoUrl: downloadedUrl);
+                          }
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
+                    }
+                  },
                 )
               ],
             ),
