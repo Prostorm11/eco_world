@@ -45,13 +45,17 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   var cs=Theme.of(context).colorScheme;
     return Container(
       color:cs.onPrimary ,
-      child:  profile.isEmpty&&isloading? const Center(child: CircularProgressIndicator(),):
+      child:  /* profile.isEmpty&&isloading? const Center(child: CircularProgressIndicator(),): */
       SingleChildScrollView(
           controller: controller,
           child: Column(
         children: [
           
           const Advertisementbox(),
+          const GalleryboxAsset(postAsset: "IdaAndI.jpg"),
+          const GalleryboxAsset(postAsset: "Waterfall.jpeg"),
+          const GalleryboxAsset(postAsset: "Myanmar.jpeg"),
+          const GalleryboxAsset(postAsset: "tripaGhana.jpg"),
           ...profile.map((element) =>  Gallerybox(postUrl:element["postUrl"] ,),),
           if(isloading)
          const Center(child: CircularProgressIndicator())

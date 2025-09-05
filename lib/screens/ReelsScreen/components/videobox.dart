@@ -50,7 +50,8 @@ class VideoboxState extends State<Videobox> with WidgetsBindingObserver {
   }
 
   Future<void> _initializeController(int index) async {
-    if (_controllers.containsKey(index)) return;
+    try{
+if (_controllers.containsKey(index)) return;
 
     final controller = VideoPlayerController.networkUrl(Uri.parse(_urls[index]));
     await controller.initialize();
@@ -66,6 +67,10 @@ class VideoboxState extends State<Videobox> with WidgetsBindingObserver {
       controller.play();
     }
     setState(() {});
+    }catch(e){
+     print("crashed");
+    }
+    
   }
 
  void _onPageChanged(int newIndex) async {
