@@ -75,3 +75,29 @@ Future<List<Map>> loadProfilePosts() async {
 
   return handleToPost;
 }
+
+Future<List<Map>> loadUserPosts(String uid) async {
+  Query query = FirebaseFirestore.instance
+      .collection("posts")
+      .orderBy("timestamp", descending: true)
+      .where("userId", isEqualTo: uid)
+      .limit(12);
+
+  if (lastUserProfilePost != null) {
+    query = query.startAfterDocument(lastUserProfilePost!);
+  }
+
+  QuerySnapshot snapshot = await query.get();
+
+  if (snapshot.docs.isNotEmpty) {
+    lastUserProfilePost = snapshot.docs.last;
+  }
+
+  // We'll store handle -> postUrl
+ /*  Map<String, String> handleToPostMap = {}; */
+  List<Map>  handleToPost=[];
+
+  handleToPost= snapshot.docs.map((doc) => {"url": doc["url"], "type": doc["mediaType"]}).toList();
+
+  return handleToPost;
+}

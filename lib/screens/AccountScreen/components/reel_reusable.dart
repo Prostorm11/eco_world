@@ -49,10 +49,10 @@ class _ReelReusableState extends State<ReelReusable> {
                                 spreadRadius: 1)
                           ]),
                     );
-                  } else if (type == 'video') {
-                    return const Reelbox();
-                  } else {
+                  } else if (type == 'Picture') {
                     return const Text('Unknown type');
+                  } else {
+                    return const Reelbox();
                   }
                 }).toList(),
               );

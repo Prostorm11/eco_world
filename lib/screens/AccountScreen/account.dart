@@ -5,6 +5,7 @@ import 'package:eco_world/constants.dart';
 import 'package:eco_world/screens/AccountScreen/components/content_pick.dart';
 import 'package:eco_world/screens/AccountScreen/components/data_movement.dart';
 import 'package:eco_world/screens/AccountScreen/components/dropdown_list_icon.dart';
+import 'package:eco_world/screens/AccountScreen/components/pagination.dart';
 import 'package:eco_world/screens/AccountScreen/components/upload_progress_indicator.dart';
 import 'package:eco_world/screens/SignUpLogin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,10 +21,35 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   String currentContent = "window";
-  /* String uid = FirebaseAuth.instance.currentUser?.uid ?? ""; */
+  String uid=FirebaseAuth.instance.currentUser!.uid;
+  bool postExist=false;
+  List<dynamic> userPosts = [];
+
+  @override
+  initState() {
+    super.initState();
+    checkIfPostExists("examplePostId"); // Replace with actual post ID to check
+  }
 
   void changePage(String contentKey) {
     setState(() => currentContent = contentKey);
+  }
+  void checkIfPostExists(String postId) async {
+
+    /* final snapshot = await FirebaseFiresListtore.instance
+        .collection("posts")
+        .where("userId", isEqualTo: uid)
+        
+        .get(); */
+      List newPost=await loadUserPosts(uid);
+    if (newPost.isNotEmpty) {
+      setState(() {
+        postExist = true;
+        userPosts.addAll(newPost);
+      });
+    } else {
+      postExist = false;
+    }
   }
 
   int get currentIndex => {
@@ -252,7 +278,16 @@ class _AccountScreenState extends State<AccountScreen> {
     final theme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
-      child: Column(
+      child:postExist? 
+        Column(
+          children: [
+            ReelReusable(mediaSource: userPosts),
+            if(userPosts.isEmpty) const Text("No posts yet")
+            
+          ],
+        )
+
+      : Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
